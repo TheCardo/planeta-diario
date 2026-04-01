@@ -27,7 +27,7 @@ import java.util.List;
         }*/
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public record GnewsResponseDTO(
+public record NoticiaRespostaDTO(
         @JsonProperty("totalArticles") int totalDeArtigos,
-        @JsonProperty("articles") ArticleDTO artigos
+        @JsonProperty("articles") List<ArtigosDTO> artigos
         ){}

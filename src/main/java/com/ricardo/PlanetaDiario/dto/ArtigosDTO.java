@@ -3,8 +3,6 @@ package com.ricardo.PlanetaDiario.dto;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.util.List;
-
 /*
 {
         "totalArticles": 54904,
@@ -29,7 +27,7 @@ import java.util.List;
         }*/
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public record ArticleDTO(
+public record ArtigosDTO(
         @JsonProperty("title") String titulo,
         @JsonProperty("description") String descricao,
         @JsonProperty("content") String conteudo,
@@ -37,4 +35,4 @@ public record ArticleDTO(
         @JsonProperty("image") String imagem,
         @JsonProperty("publishedAt") String dataDePublicacao,
         @JsonProperty("lang") String linguagem,
-        @JsonProperty("source") List<SourceDTO> fonte) {}
+        @JsonProperty("source") FonteDTO fonte) {}

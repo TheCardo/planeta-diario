@@ -28,7 +28,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
         }*/
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public record SourceDTO(
+public record FonteDTO(
         @JsonProperty("name") String nomeDaFonte,
         @JsonProperty("url") String urlDaFonte,
         @JsonProperty("country") String paisDaFonte
