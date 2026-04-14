@@ -5,5 +5,6 @@ import com.ricardo.PlanetaDiario.dto.NoticiaRespostaDTO;
 public interface NoticiaService {
 
     NoticiaRespostaDTO buscarNoticiasPorTermo(String termo);
+    NoticiaRespostaDTO buscarNoticiasPorCategoriasEmAlta(String categoria);
 
 }

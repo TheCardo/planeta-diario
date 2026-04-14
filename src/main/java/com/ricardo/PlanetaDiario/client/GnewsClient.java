@@ -40,9 +40,9 @@ public class GnewsClient {
 
 
 
-    public NoticiaRespostaDTO getNoticiasPorCategoriasTopHeadlines(String categoria){
+    public NoticiaRespostaDTO getNoticiasPorCategoriasEmAlta(String categoria){
 
-        String url = GNEWS_URL + "/top-headlines" + "?apikey=" + apiKey + "&category=" + categoria;
+        String url = GNEWS_URL + "/top-headlines" + "?apikey=" + apiKey + "&category=" + categoria + "&lang=pt&country=br";
         try {
             return restTemplate.getForObject(url, NoticiaRespostaDTO.class);
         }catch (Exception e){
@@ -52,7 +52,7 @@ public class GnewsClient {
     }
 
     public NoticiaRespostaDTO getNoticiasPorTermoDeCategoria(String termoDeBusca){
-        String url = GNEWS_URL + "/search" + "?apikey=" + apiKey + "&q=" + termoDeBusca;
+        String url = GNEWS_URL + "/search" + "?apikey=" + apiKey + "&q=" + termoDeBusca + "&lang=pt&country=br";
         try{
             return restTemplate.getForObject(url, NoticiaRespostaDTO.class);
         }catch (Exception e) {

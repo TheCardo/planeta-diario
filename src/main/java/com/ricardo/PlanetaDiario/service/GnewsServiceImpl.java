@@ -14,6 +14,11 @@ public class GnewsServiceImpl implements NoticiaService {
 
     @Override
     public NoticiaRespostaDTO buscarNoticiasPorTermo(String termo) {
-        return gnewsClient.getNoticiasPorTermoDeCategoria(termo);}
+        return gnewsClient.getNoticiasPorTermoDeCategoria(termo);
+    }
 
+    @Override
+    public NoticiaRespostaDTO buscarNoticiasPorCategoriasEmAlta(String categoria){
+        return gnewsClient.getNoticiasPorCategoriasEmAlta(categoria);
+    }
 }
