@@ -1,12 +1,11 @@
-package com.ricardo.PlanetaDiario.model;
-import com.ricardo.PlanetaDiario.model.enums.TipoUsuario;
+package com.ricardo.PlanetaDiario.entities;
+import com.ricardo.PlanetaDiario.entities.enums.TipoUsuario;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
-import org.hibernate.validator.constraints.UUID;
 
 import java.time.LocalDateTime;
 
@@ -19,6 +18,7 @@ public class Usuario {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "user_id")
     private java.util.UUID id;
 
     @NotBlank(message = "o nome não pode ser vazio")

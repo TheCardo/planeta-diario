@@ -1,6 +1,6 @@
 package com.ricardo.PlanetaDiario.repository;
 
-import com.ricardo.PlanetaDiario.model.Usuario;
+import com.ricardo.PlanetaDiario.entities.Usuario;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

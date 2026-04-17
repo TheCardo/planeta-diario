@@ -1,4 +1,4 @@
-package com.ricardo.PlanetaDiario.model;
+package com.ricardo.PlanetaDiario.entities;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -15,6 +15,7 @@ public class Comentario {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "comentarios_id")
     private UUID id;
 
     @NotBlank(message = "A URL do artigo é obrigatória")

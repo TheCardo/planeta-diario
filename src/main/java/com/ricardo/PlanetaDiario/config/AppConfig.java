@@ -1,4 +1,4 @@
-package com.ricardo.PlanetaDiario.configs;
+package com.ricardo.PlanetaDiario.config;
 
 
 import org.springframework.context.annotation.Bean;

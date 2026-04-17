@@ -1,6 +1,5 @@
-package com.ricardo.PlanetaDiario.model.enums;
+package com.ricardo.PlanetaDiario.entities.enums;
 
-import lombok.Data;
 import lombok.Getter;
 
 @Getter
