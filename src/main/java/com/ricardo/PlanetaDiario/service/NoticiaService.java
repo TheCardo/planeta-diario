@@ -1,10 +1,10 @@
 package com.ricardo.PlanetaDiario.service;
 
-import com.ricardo.PlanetaDiario.dto.NoticiaRespostaDTO;
+import com.ricardo.PlanetaDiario.dto.NoticiaResponse;
 
 public interface NoticiaService {
 
-    NoticiaRespostaDTO buscarNoticiasPorTermo(String termo);
-    NoticiaRespostaDTO buscarNoticiasPorCategoriasEmAlta(String categoria);
+    NoticiaResponse buscarNoticiasPorTermo(String termo);
+    NoticiaResponse buscarNoticiasPorCategoriasEmAlta(String categoria);
 
 }

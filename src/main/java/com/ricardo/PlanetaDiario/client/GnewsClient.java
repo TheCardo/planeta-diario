@@ -1,6 +1,6 @@
 package com.ricardo.PlanetaDiario.client;
 
-import com.ricardo.PlanetaDiario.dto.NoticiaRespostaDTO;
+import com.ricardo.PlanetaDiario.dto.NoticiaResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -40,21 +40,21 @@ public class GnewsClient {
 
 
 
-    public NoticiaRespostaDTO getNoticiasPorCategoriasEmAlta(String categoria){
+    public NoticiaResponse getNoticiasPorCategoriasEmAlta(String categoria){
 
         String url = GNEWS_URL + "/top-headlines" + "?apikey=" + apiKey + "&category=" + categoria + "&lang=pt&country=br";
         try {
-            return restTemplate.getForObject(url, NoticiaRespostaDTO.class);
+            return restTemplate.getForObject(url, NoticiaResponse.class);
         }catch (Exception e){
             System.err.println("erro ao acessar as noticias" + e.getMessage());
             return null;
         }
     }
 
-    public NoticiaRespostaDTO getNoticiasPorTermoDeCategoria(String termoDeBusca){
+    public NoticiaResponse getNoticiasPorTermoDeCategoria(String termoDeBusca){
         String url = GNEWS_URL + "/search" + "?apikey=" + apiKey + "&q=" + termoDeBusca + "&lang=pt&country=br";
         try{
-            return restTemplate.getForObject(url, NoticiaRespostaDTO.class);
+            return restTemplate.getForObject(url, NoticiaResponse.class);
         }catch (Exception e) {
             System.err.println("erro ao acessar as noticias" + e.getMessage());
             return null;

@@ -1,7 +1,7 @@
 package com.ricardo.PlanetaDiario.service;
 
 import com.ricardo.PlanetaDiario.client.GnewsClient;
-import com.ricardo.PlanetaDiario.dto.NoticiaRespostaDTO;
+import com.ricardo.PlanetaDiario.dto.NoticiaResponse;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -13,12 +13,12 @@ public class GnewsServiceImpl implements NoticiaService {
     }
 
     @Override
-    public NoticiaRespostaDTO buscarNoticiasPorTermo(String termo) {
+    public NoticiaResponse buscarNoticiasPorTermo(String termo) {
         return gnewsClient.getNoticiasPorTermoDeCategoria(termo);
     }
 
     @Override
-    public NoticiaRespostaDTO buscarNoticiasPorCategoriasEmAlta(String categoria){
+    public NoticiaResponse buscarNoticiasPorCategoriasEmAlta(String categoria){
         return gnewsClient.getNoticiasPorCategoriasEmAlta(categoria);
     }
 }

@@ -1,6 +1,6 @@
 package com.ricardo.PlanetaDiario.controller;
 
-import com.ricardo.PlanetaDiario.dto.NoticiaRespostaDTO;
+import com.ricardo.PlanetaDiario.dto.NoticiaResponse;
 import com.ricardo.PlanetaDiario.service.NoticiaService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -22,9 +22,9 @@ public class NoticiaController {
 
 
     @GetMapping("/busca/{termo}")
-    public ResponseEntity<NoticiaRespostaDTO> procurarArtigos(@PathVariable String termo) {
+    public ResponseEntity<NoticiaResponse> procurarArtigos(@PathVariable String termo) {
 
-        NoticiaRespostaDTO artigos = noticiaService.buscarNoticiasPorTermo(termo);
+        NoticiaResponse artigos = noticiaService.buscarNoticiasPorTermo(termo);
 
         if (artigos != null) {
             return ResponseEntity.ok(artigos);
@@ -33,9 +33,9 @@ public class NoticiaController {
         }
     }
     @GetMapping("/top/{categoria}")
-    public ResponseEntity<NoticiaRespostaDTO> buscarTopHeadlines(@PathVariable String categoria){
+    public ResponseEntity<NoticiaResponse> buscarTopHeadlines(@PathVariable String categoria){
 
-        NoticiaRespostaDTO artigos = noticiaService.buscarNoticiasPorCategoriasEmAlta(categoria);
+        NoticiaResponse artigos = noticiaService.buscarNoticiasPorCategoriasEmAlta(categoria);
 
         if (artigos != null){
             return ResponseEntity.ok(artigos);
