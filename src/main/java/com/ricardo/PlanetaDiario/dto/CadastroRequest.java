@@ -21,5 +21,7 @@ public record CadastroRequest(
         String senha,
 
         @NotNull(message = "Tipo de usuário obrigatório")
-        TipoUsuario tipo
+        TipoUsuario tipo,
+
+        String profissao
 ) {}

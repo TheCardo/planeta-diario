@@ -37,10 +37,14 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http
-                .authorizeHttpRequests(authorize -> authorize.requestMatchers("/auth/register","/auth/login").permitAll().anyRequest().authenticated())
+                .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers("/auth/register", "/auth/login").permitAll()
+                        .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/news/**").permitAll()
+                )
                 .csrf(csrf -> csrf.disable())
-                .oauth2ResourceServer(oauth2-> oauth2.jwt(Customizer.withDefaults()))
+                .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+
         return http.build();
     }
 
