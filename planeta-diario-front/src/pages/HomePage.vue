@@ -1,8 +1,7 @@
 <template>
   <div class="min-h-screen bg-[#F9F9F6] text-[#1C1C1E] pb-12">
     
-    <header class="max-w-7xl mx-auto px-4 pt-6">
-      
+   <header class="max-w-7xl mx-auto px-4 pt-6">
       <div class="flex justify-between items-end border-b-2 border-[#1C1C1E] pb-2 mb-2">
         <div class="text-[10px] font-bold uppercase tracking-widest hidden md:block w-1/4">
           {{ currentDate }}
@@ -15,35 +14,31 @@
         <div class="text-[10px] font-bold uppercase tracking-widest hidden md:flex w-1/4 justify-end items-center gap-4">
           <span>Edição Digital</span>
           
-          <button @click="irParaPerfil" class="hover:text-[#0A3161] transition-colors" title="Acessar Meu Perfil">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+          <span v-if="nomeUsuario" class="text-[#0A3161] font-black border-r border-black/20 pr-4">
+            {{ nomeUsuario }}
+          </span>
+          
+          <button @click="irParaPerfil" 
+                  class="flex items-center justify-center w-10 h-10 bg-[#0A3161] text-white rounded-full hover:bg-[#CBA052] transition-colors shadow-md" 
+                  title="Acessar Meu Perfil">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
+              <path fill-rule="evenodd" d="M7.5 6a4.5 4.5 0 1 1 9 0 4.5 4.5 0 0 1-9 0ZM3.751 20.105a8.25 8.25 0 0 1 16.498 0 .75.75 0 0 1-.437.695A18.683 18.683 0 0 1 12 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 0 1-.437-.695Z" clip-rule="evenodd" />
             </svg>
           </button>
         </div>
-      </div>
+      </div> 
       
       <nav class="border-b border-[#1C1C1E]/30 pb-3 mb-8 flex flex-col md:flex-row justify-between items-center gap-4">
-        
         <ul class="flex flex-wrap justify-center gap-x-6 gap-y-2 text-[11px] font-black uppercase tracking-widest flex-grow">
           <li v-for="categoria in categorias" :key="categoria">
-            <button 
-              @click="categoriaAtiva = categoria"
-              class="transition-colors hover:text-[#0A3161] pb-1"
-              :class="categoriaAtiva === categoria ? 'text-[#0A3161] border-b-2 border-[#0A3161]' : 'text-[#1C1C1E]/70'"
-            >
+            <button @click="categoriaAtiva = categoria" class="transition-colors hover:text-[#0A3161] pb-1" :class="categoriaAtiva === categoria ? 'text-[#0A3161] border-b-2 border-[#0A3161]' : 'text-[#1C1C1E]/70'">
               {{ categoria }}
             </button>
           </li>
         </ul>
-
         <div class="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest pl-4 md:border-l border-[#1C1C1E]/30">
           <label for="countryFilter" class="text-black/60">País:</label>
-          <select 
-            id="countryFilter" 
-            v-model="paisAtivo" 
-            class="bg-transparent border-none outline-none cursor-pointer hover:text-[#0A3161] transition-colors font-bold uppercase tracking-widest"
-          >
+          <select id="countryFilter" v-model="paisAtivo" class="bg-transparent border-none outline-none cursor-pointer hover:text-[#0A3161] transition-colors font-bold uppercase tracking-widest">
             <option value="br">Brasil</option>
             <option value="us">Estados Unidos</option>
             <option value="pt">Portugal</option>
@@ -51,7 +46,6 @@
             <option value="ar">Argentina</option>
           </select>
         </div>
-
       </nav>
     </header>
 
@@ -113,7 +107,7 @@
           </article>
         </div>
 
-        <div class="mt-8 bg-[#E5E5E1] p-6 border border-[#1C1C1E]/20 text-center">
+        <div v-if="!isLoggedIn" class="mt-8 bg-[#E5E5E1] p-6 border border-[#1C1C1E]/20 text-center">
           <h3 class="font-serif text-xl font-bold mb-2">Acervo Confidencial</h3>
           <p class="text-sm text-black/70 mb-4">Acesse matérias exclusivas e participe dos debates nos comentários.</p>
           <button @click="irParaLogin" class="bg-[#1C1C1E] text-white px-6 py-2 text-xs font-bold uppercase tracking-widest hover:bg-[#0A3161] transition-colors w-full cursor-pointer">
@@ -150,6 +144,8 @@ const currentDate = computed(() => {
 });
 
 const isLoading = ref(true);
+const isLoggedIn = ref(!!localStorage.getItem('token'));
+const nomeUsuario = ref(''); // NOVO: Variável para o nome do usuário
 const topHeadline = ref({});
 const noticiasSecundarias = ref([]);
 const ultimasAtualizacoes = ref([]);
@@ -186,41 +182,31 @@ const buscarNoticias = async () => {
     }
 
   } catch (error) {
-    console.error("Erro na API (provável Limite 429). Ativando o Modo Offline de emergência:", error);
+    console.error("Erro na API de Noticias:", error);
     
+    // Fallback Offline
     topHeadline.value = {
       titulo: '[MODO OFFLINE] GNews API Atinge Limite de Requisições',
-      resumo: 'O Daily Planet entrou em modo de contingência. Os repórteres consumiram toda a cota de requisições gratuitas da API. Enquanto aguardamos o reset do servidor, este cache local manterá a sua tela funcionando para fins de desenvolvimento do layout.',
+      resumo: 'O Daily Planet entrou em modo de contingência...',
       autor: 'Lois Lane (Backup)',
       tempoAtras: 'Agora mesmo',
       imagem: 'https://images.unsplash.com/photo-1504711434969-e33886168f5c?q=80&w=800&auto=format&fit=crop'
     };
-
-    noticiasSecundarias.value = [
-      {
-        id: 'mock1',
-        titulo: 'Como lidar com Erros 429 no Frontend',
-        resumo: 'Aprenda a criar fallbacks e placeholders para manter a retenção do usuário quando serviços de terceiros falham.',
-        categoria: categoriaAtiva.value,
-        imagem: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=600&auto=format&fit=crop'
-      },
-      {
-        id: 'mock2',
-        titulo: 'A Importância da Resiliência de Software',
-        resumo: 'Sistemas modernos precisam estar preparados para falhas de rede. O uso de Caches e Circuit Breakers é essencial.',
-        categoria: 'Engenharia',
-        imagem: 'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?q=80&w=600&auto=format&fit=crop'
-      }
-    ];
-
-    ultimasAtualizacoes.value = [
-      { id: 'u1', tempoAtras: 'Sistema', titulo: 'API GNews temporariamente indisponível.' },
-      { id: 'u2', tempoAtras: 'Sistema', titulo: 'Carregando dados a partir do cache local.' },
-      { id: 'u3', tempoAtras: 'Dica', titulo: 'Gere uma nova API Key se quiser dados reais agora.' }
-    ];
-
   } finally {
     isLoading.value = false;
+  }
+};
+
+// NOVO: Função para buscar o nome se estiver logado
+const verificarSessao = async () => {
+  if (isLoggedIn.value) {
+    try {
+      const response = await api.get('/api/usuarios/me');
+      nomeUsuario.value = response.data.username;
+    } catch (error) {
+      console.error("Erro ao verificar sessão:", error);
+      console.warn("Erro ao buscar dados do usuário. Sessão pode ser inválida.");
+    }
   }
 };
 
@@ -232,6 +218,7 @@ const formatarData = (dataString) => {
 
 onMounted(() => {
   buscarNoticias();
+  verificarSessao(); // Chama a verificação ao abrir a tela
 });
 
 watch(categoriaAtiva, () => {
@@ -239,10 +226,23 @@ watch(categoriaAtiva, () => {
 });
 
 const irParaPerfil = () => {
-  router.push('/profile');
+  if (isLoggedIn.value) {
+    router.push('/perfil');
+  } else {
+    router.push('/login');
+  }
 };
 
 const irParaLogin = () => {
   router.push('/login');
 };
 </script>
+
+<style scoped>
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;  
+  overflow: hidden;
+}
+</style>

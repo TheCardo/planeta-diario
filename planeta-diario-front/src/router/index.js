@@ -1,6 +1,4 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import AuthPage from '@/pages/AuthPage.vue'
-import HomePage from '@/pages/HomePage.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -16,10 +14,10 @@ const router = createRouter({
       component: () => import('@/pages/HomePage.vue')
     },
     {
-      path: '/profile',
+      path: '/perfil',
       name: 'profile',
       component: () => import('@/pages/ProfilePage.vue')
-    }
+    },
   ]
 })
 

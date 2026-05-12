@@ -5,6 +5,7 @@ import com.ricardo.PlanetaDiario.dto.CadastroResponse;
 import com.ricardo.PlanetaDiario.dto.LoginRequest;
 import com.ricardo.PlanetaDiario.dto.LoginResponse;
 import com.ricardo.PlanetaDiario.entities.Usuario;
+import com.ricardo.PlanetaDiario.entities.enums.TipoUsuario;
 import com.ricardo.PlanetaDiario.repository.UsuarioRepository;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -40,6 +41,10 @@ public class AuthServiceImpl implements AuthService {
         usuario.setEmail(request.email());
         usuario.setSenha(passwordEncoder.encode(request.senha())); // NUNCA salvar senha em texto puro
         usuario.setTipo(request.tipo());
+
+        if (request.tipo() == TipoUsuario.CRIADOR_DE_CONTEUDO && request.profissao() != null) {
+            usuario.setProfissao(request.profissao());
+        }
 
         var salvo = usuarioRepository.save(usuario);
 

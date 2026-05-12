@@ -37,9 +37,12 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http
+                .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers(org.springframework.http.HttpMethod.OPTIONS, "/**").permitAll() // <-- 2. PERMITE A VERIFICAÇÃO DO NAVEGADOR
                         .requestMatchers("/auth/register", "/auth/login").permitAll()
                         .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/news/**").permitAll()
+                        .anyRequest().authenticated()
                 )
                 .csrf(csrf -> csrf.disable())
                 .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()))
