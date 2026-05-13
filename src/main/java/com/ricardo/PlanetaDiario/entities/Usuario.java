@@ -22,6 +22,11 @@ public class Usuario {
     private java.util.UUID id;
 
     @NotBlank(message = "o nome não pode ser vazio")
+    @Size(min = 2, max = 100 , message = "seu nome deve ter entre 2 a 100 caracteres")
+    @Column(unique = true)
+    private String nome;
+
+    @NotBlank(message = "o username não pode ser vazio")
     @Size(min = 3, max = 100, message = "Seu Username deve ter entre 3 e 100 caracteres")
     @Column(unique = true)
     private String username;

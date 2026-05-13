@@ -8,6 +8,10 @@ import jakarta.validation.constraints.Size;
 
 public record CadastroRequest(
 
+        @NotBlank(message = "Nome obrigatório")
+        @Size(min = 3, max = 100)
+        String nome,
+
         @NotBlank(message = "Nome de usuário obrigatório")
         @Size(min = 3, max = 100)
         String username,

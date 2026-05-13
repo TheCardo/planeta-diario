@@ -25,9 +25,15 @@ public class UsuarioController {
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado nos arquivos do Planeta Diário"));
 
         PerfilResponse response = new PerfilResponse(
-                usuario.getId(), usuario.getUsername(), usuario.getEmail(),
-                usuario.getBio(), usuario.getFotoUrl(), usuario.getProfissao(),
-                usuario.getTipo(), usuario.getDataDeCriacao()
+                usuario.getId(),
+                usuario.getNome(),
+                usuario.getUsername(),
+                usuario.getEmail(),
+                usuario.getBio(),
+                usuario.getFotoUrl(),
+                usuario.getProfissao(),
+                usuario.getTipo(),
+                usuario.getDataDeCriacao()
         );
 
         return ResponseEntity.ok(response);
@@ -41,6 +47,8 @@ public class UsuarioController {
         usuario.setBio(request.bio());
         usuario.setFotoUrl(request.fotoUrl());
 
+        usuario.setNome(request.nome());
+
         if (usuario.getTipo().name().equals("CRIADOR_DE_CONTEUDO")) {
             usuario.setProfissao(request.profissao());
         }
@@ -48,9 +56,15 @@ public class UsuarioController {
         usuarioRepository.save(usuario);
 
         PerfilResponse response = new PerfilResponse(
-                usuario.getId(), usuario.getUsername(), usuario.getEmail(),
-                usuario.getBio(), usuario.getFotoUrl(), usuario.getProfissao(),
-                usuario.getTipo(), usuario.getDataDeCriacao()
+                usuario.getId(),
+                usuario.getNome(),
+                usuario.getUsername(),
+                usuario.getEmail(),
+                usuario.getBio(),
+                usuario.getFotoUrl(),
+                usuario.getProfissao(),
+                usuario.getTipo(),
+                usuario.getDataDeCriacao()
         );
 
         return ResponseEntity.ok(response);

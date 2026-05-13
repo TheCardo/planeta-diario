@@ -37,6 +37,7 @@ public class AuthServiceImpl implements AuthService {
         }
 
         var usuario = new Usuario();
+        usuario.setNome(request.nome());
         usuario.setUsername(request.username());
         usuario.setEmail(request.email());
         usuario.setSenha(passwordEncoder.encode(request.senha())); // NUNCA salvar senha em texto puro

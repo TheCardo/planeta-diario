@@ -37,13 +37,13 @@
 
         <div class="flex-grow">
           <div class="flex items-center gap-3 mb-1">
-            <h2 class="font-serif text-4xl md:text-5xl font-black tracking-tight">{{ usuario?.username }}</h2>
+            <h2 class="font-serif text-4xl md:text-5xl font-black tracking-tight">{{ usuario?.nome || usuario?.username }}</h2>
             <span v-if="usuario?.tipo === 'CRIADOR_DE_CONTEUDO'" class="bg-[#0A3161] text-white text-[9px] font-bold uppercase tracking-widest px-2 py-1 rounded-sm mt-2">
               {{ usuario?.profissao || 'Jornalista' }}
             </span>
           </div>
           <p class="text-sm font-bold text-black/40 mb-4 uppercase tracking-widest">{{ usuario?.email }}</p>
-          <p class="font-sans text-lg text-[#1C1C1E]/80 leading-relaxed mb-6 max-w-2xl">
+          <p class="font-sans text-lg text-[#1C1C1E]/80 leading-relaxed mb-6 max-w-2xl whitespace-pre-wrap">
             {{ usuario?.bio || 'Sua Biografia aqui...' }}
           </p>
         </div>
@@ -51,14 +51,39 @@
 
       <nav class="flex gap-8 border-b border-[#1C1C1E]/20 mb-8">
         <button v-if="usuario?.tipo === 'CRIADOR_DE_CONTEUDO'" @click="abaAtiva = 'publicacoes'" class="pb-3 text-xs font-black uppercase tracking-widest transition-colors" :class="abaAtiva === 'publicacoes' ? 'border-b-2 border-[#0A3161] text-[#0A3161]' : 'text-black/50 hover:text-black'">
-          Meus Dossiês
+          Meus Dossiês ({{ meusDossies.length }})
         </button>
         <button @click="abaAtiva = 'salvos'" class="pb-3 text-xs font-black uppercase tracking-widest transition-colors" :class="abaAtiva === 'salvos' ? 'border-b-2 border-[#0A3161] text-[#0A3161]' : 'text-black/50 hover:text-black'">
           Acervo Salvo
         </button>
       </nav>
       
-      <div class="text-center py-12 text-black/40 italic font-serif text-lg">
+      <div v-if="abaAtiva === 'publicacoes'">
+        <div v-if="meusDossies.length === 0" class="text-center py-12 text-black/40 italic font-serif text-lg">
+          Você ainda não publicou nenhum dossiê.
+        </div>
+        <div class="space-y-6">
+          <article v-for="pub in meusDossies" :key="pub.id" class="border border-[#1C1C1E]/10 p-6 bg-white shadow-sm hover:shadow-md transition-shadow">
+            <h3 class="font-serif text-2xl font-bold mb-3">{{ pub.titulo }}</h3>
+            <p class="font-sans text-[#1C1C1E]/80 whitespace-pre-wrap text-sm line-clamp-3 mb-4">{{ pub.conteudo }}</p>
+            
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center mt-4 border-t border-black/5 pt-4 gap-4">
+              <div class="text-[10px] text-black/40 font-bold uppercase tracking-widest">
+                Publicado em: {{ formatarData(pub.dataDeCriacao) }}
+              </div>
+              
+              <a :href="pub.noticiaUrlRef" target="_blank" class="text-[10px] font-black uppercase tracking-widest text-[#0A3161] hover:text-[#CBA052] transition-colors flex items-center gap-1">
+                Ler Matéria Original
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-3 h-3">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
+                </svg>
+              </a>
+            </div>
+          </article>
+        </div>
+      </div>
+
+      <div v-if="abaAtiva === 'salvos'" class="text-center py-12 text-black/40 italic font-serif text-lg">
         Nenhum registro encontrado nestes arquivos no momento.
       </div>
     </main>
@@ -67,6 +92,10 @@
       <div class="bg-[#F9F9F6] w-full max-w-md p-8 border-t-8 border-[#0A3161] shadow-2xl">
         <h3 class="font-serif text-2xl font-bold mb-6 italic">Atualizar Credenciais</h3>
         <form @submit.prevent="salvarAlteracoes" class="space-y-4">
+          <div>
+            <label class="block text-[10px] font-black uppercase mb-1">Nome de Apresentação</label>
+            <input v-model="editForm.nome" type="text" placeholder="Seu nome completo" class="w-full bg-transparent border-b border-black py-1 focus:outline-none focus:border-[#0A3161]" required>
+          </div>
           <div>
             <label class="block text-[10px] font-black uppercase mb-1">Link da Foto de Perfil</label>
             <input v-model="editForm.fotoUrl" type="text" placeholder="Cole a URL da sua imagem aqui" class="w-full bg-transparent border-b border-black py-1 focus:outline-none focus:border-[#0A3161]">
@@ -100,7 +129,8 @@ const isLoading = ref(true);
 const abaAtiva = ref('salvos');
 const showModal = ref(false);
 
-const editForm = ref({ bio: '', fotoUrl: '', profissao: '' });
+const meusDossies = ref([]); 
+const editForm = ref({ nome: '', bio: '', fotoUrl: '', profissao: '' });
 
 const toast = reactive({ show: false, message: '', type: 'success' });
 const showToast = (msg, type = 'success') => {
@@ -123,6 +153,13 @@ const carregarPerfil = async () => {
     usuario.value = response.data;
     if (usuario.value.tipo === 'CRIADOR_DE_CONTEUDO') {
       abaAtiva.value = 'publicacoes';
+      
+      try {
+        const resDossies = await api.get('/api/publicacoes/meus-dossies');
+        meusDossies.value = resDossies.data;
+      } catch (e) {
+        console.error("Erro ao buscar as publicações do repórter", e);
+      }
     }
   } catch (error) {
     console.error("Erro ao carregar perfil. Token inválido. Limpando dados...", error);
@@ -134,6 +171,7 @@ const carregarPerfil = async () => {
 
 const abrirModal = () => {
   editForm.value = { 
+    nome: usuario.value?.nome || '', 
     bio: usuario.value?.bio || '', 
     fotoUrl: usuario.value?.fotoUrl || '', 
     profissao: usuario.value?.profissao || '' 
@@ -151,6 +189,11 @@ const salvarAlteracoes = async () => {
     console.error(error);
     showToast("Erro ao atualizar credenciais.", "error");
   }
+};
+
+const formatarData = (dataString) => {
+  const data = new Date(dataString);
+  return data.toLocaleDateString('pt-BR') + ' às ' + data.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
 };
 
 onMounted(carregarPerfil);

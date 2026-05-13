@@ -56,7 +56,7 @@
           <h2 class="text-xs font-black uppercase tracking-widest text-[#0A3161]">Manchete Principal</h2>
         </div>
         
-        <article class="group cursor-pointer">
+        <article @click="lerNoticia(topHeadline)" class="group cursor-pointer">
           <h1 class="font-serif text-4xl md:text-5xl font-bold leading-none mb-4 group-hover:text-[#0A3161] transition-colors">
             {{ topHeadline.titulo }}
           </h1>
@@ -78,7 +78,7 @@
         <hr class="my-8 border-t border-[#1C1C1E]/20">
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <article v-for="noticia in noticiasSecundarias" :key="noticia.id" class="group cursor-pointer border-b md:border-b-0 border-[#1C1C1E]/10 pb-6 md:pb-0">
+          <article v-for="noticia in noticiasSecundarias" :key="noticia.id" @click="lerNoticia(noticia)" class="group cursor-pointer border-b md:border-b-0 border-[#1C1C1E]/10 pb-6 md:pb-0">
             <img :src="noticia.imagem" class="w-full h-48 object-cover mb-3 border border-black/10 grayscale group-hover:grayscale-0 transition-all" alt="">
             <h3 class="font-serif text-2xl font-bold leading-tight mb-2 group-hover:text-[#0A3161] transition-colors">
               {{ noticia.titulo }}
@@ -99,7 +99,7 @@
         </div>
         
         <div class="flex flex-col gap-4 mt-4">
-          <article v-for="noticia in ultimasAtualizacoes" :key="noticia.id" class="cursor-pointer group border-b border-[#1C1C1E]/10 pb-4 last:border-0">
+          <article v-for="noticia in ultimasAtualizacoes" :key="noticia.id" @click="lerNoticia(noticia)" class="cursor-pointer group border-b border-[#1C1C1E]/10 pb-4 last:border-0">
             <span class="text-[10px] font-bold text-black/40 mb-1 block">{{ noticia.tempoAtras }}</span>
             <h4 class="font-serif text-lg font-bold leading-tight group-hover:text-[#0A3161] transition-colors">
               {{ noticia.titulo }}
@@ -145,7 +145,7 @@ const currentDate = computed(() => {
 
 const isLoading = ref(true);
 const isLoggedIn = ref(!!localStorage.getItem('token'));
-const nomeUsuario = ref(''); // NOVO: Variável para o nome do usuário
+const nomeUsuario = ref(''); 
 const topHeadline = ref({});
 const noticiasSecundarias = ref([]);
 const ultimasAtualizacoes = ref([]);
@@ -184,7 +184,6 @@ const buscarNoticias = async () => {
   } catch (error) {
     console.error("Erro na API de Noticias:", error);
     
-    // Fallback Offline
     topHeadline.value = {
       titulo: '[MODO OFFLINE] GNews API Atinge Limite de Requisições',
       resumo: 'O Daily Planet entrou em modo de contingência...',
@@ -197,7 +196,6 @@ const buscarNoticias = async () => {
   }
 };
 
-// NOVO: Função para buscar o nome se estiver logado
 const verificarSessao = async () => {
   if (isLoggedIn.value) {
     try {
@@ -218,7 +216,7 @@ const formatarData = (dataString) => {
 
 onMounted(() => {
   buscarNoticias();
-  verificarSessao(); // Chama a verificação ao abrir a tela
+  verificarSessao(); 
 });
 
 watch(categoriaAtiva, () => {
@@ -231,6 +229,11 @@ const irParaPerfil = () => {
   } else {
     router.push('/login');
   }
+};
+
+const lerNoticia = (noticiaParaLer) => {
+  sessionStorage.setItem('noticiaAtual', JSON.stringify(noticiaParaLer));
+  router.push('/noticia');
 };
 
 const irParaLogin = () => {

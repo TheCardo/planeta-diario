@@ -71,13 +71,18 @@
             <form v-else @submit.prevent="handleRegister" class="space-y-4">
               <div class="flex gap-4 mb-2 justify-center border-b border-black/10 pb-3">
                 <label class="flex items-center gap-1 text-[10px] font-black uppercase tracking-widest cursor-pointer hover:text-[#CBA052] transition-colors">
-                  <input type="radio" v-model="registerForm.tipo" value="LEITOR" class="accent-[#CBA052] w-3 h-3">
+                  <input type="radio" v-model="registerForm.tipo" value="COMUM" class="accent-[#CBA052] w-3 h-3">
                   Apenas Leitor
                 </label>
                 <label class="flex items-center gap-1 text-[10px] font-black uppercase tracking-widest cursor-pointer hover:text-[#0A3161] transition-colors">
                   <input type="radio" v-model="registerForm.tipo" value="CRIADOR_DE_CONTEUDO" class="accent-[#0A3161] w-3 h-3">
                   Criador de Conteúdo
                 </label>
+              </div>
+
+              <div class="mb-4">
+                <label class="block text-[10px] font-black uppercase tracking-widest mb-1">Nome de Apresentação</label>
+                <input v-model="registerForm.nome" type="text" placeholder="Ex: Clark Kent" class="w-full bg-transparent border-b border-[#1C1C1E] py-1 focus:outline-none focus:border-[#CBA052] font-serif text-lg italic" required>
               </div>
 
               <div class="grid grid-cols-2 gap-4">
@@ -146,6 +151,7 @@ const showToast = (msg, type = 'success') => {
 
 const loginForm = reactive({ username: '', password: '' });
 const registerForm = reactive({ 
+  nome: '', 
   username: '', 
   email: '', 
   senha: '', 
@@ -197,6 +203,7 @@ const handleRegister = async () => {
     
     showToast("Credencial criada com sucesso! Faça o login para acessar os arquivos.", "success");
     
+    registerForm.nome = '';
     registerForm.username = '';
     registerForm.email = '';
     registerForm.senha = '';
@@ -205,7 +212,7 @@ const handleRegister = async () => {
     
   } catch (error) {
     console.error("Erro no registro:", error);
-    showToast("Erro ao solicitar registro. Verifique os dados ou se o usuário já existe.", "error");
+    showToast("Erro ao solicitar registro. Verifique se preencheu tudo corretamente.", "error");
   }
 };
 </script>
