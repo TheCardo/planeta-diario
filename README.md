@@ -122,7 +122,7 @@ O servidor estará disponível em `http://localhost:8080`.
 ### 5. Rodando o Frontend
 
 ```bash
-cd frontend
+cd planeta-diario-fronted
 npm install
 npm run dev
 ```

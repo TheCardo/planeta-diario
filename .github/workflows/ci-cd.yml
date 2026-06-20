@@ -1,0 +1,64 @@
+name: Pipeline CI/CD - O Planeta Diário
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  backend-ci:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Baixar o código do repositório
+        uses: actions/checkout@v4
+
+      - name: Configurar o JDK 21 (Temurin)
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: 'maven'
+
+      - name: Dar permissão de execução ao Maven Wrapper
+        run: chmod +x ./mvnw
+
+      - name: Compilar e Executar Testes do Backend
+        run: ./mvnw clean package
+
+  frontend-ci:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Baixar o código do repositório
+        uses: actions/checkout@v4
+
+      - name: Configurar o Node.js v22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: './planeta-diario-front/package-lock.json'
+
+      - name: Instalar Dependências do Vue.js
+        run: |
+          cd planeta-diario-front
+          npm install
+
+      - name: Gerar o Build Estático (Vite)
+        run: |
+          cd planeta-diario-front
+          npm run build
+
+
+  docker-validation:
+    runs-on: ubuntu-latest
+    needs: [backend-ci, frontend-ci]
+
+    steps:
+      - name: Baixar o código do repositório
+        uses: actions/checkout@v4
+
+      - name: Testar Construção da Infraestrutura com Docker Compose
+        run: docker compose build
