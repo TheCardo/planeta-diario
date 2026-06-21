@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'http://3.94.186.202:8080',
+  baseURL: 'http://3.84.155.169:8080',
 });
 
 api.interceptors.request.use((config) => {
