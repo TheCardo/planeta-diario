@@ -7,7 +7,7 @@ const api = axios.create({
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem('token');
   
-  if (token && token !== 'undefined' && token !== 'null' && !config.url.startsWith('/api/news') && !config.url.startsWith('/auth')) { {
+  if (token && token !== 'undefined' && token !== 'null' && !config.url.startsWith('/api/news') && !config.url.startsWith('/auth')) {
     config.headers.Authorization = `Bearer ${token}`;
   }
   return config;
@@ -21,7 +21,6 @@ api.interceptors.response.use((response) => {
   if (error.response && error.response.status === 401) {
     console.error("🚨 401 Unauthorized: O Java recusou o Token!");
     localStorage.removeItem('token');
-  
   }
   return Promise.reject(error);
 });
